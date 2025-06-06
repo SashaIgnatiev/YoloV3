@@ -1,3 +1,7 @@
-print("hello world")
+from dataset import *
 
-print("hello world 2")
+VOC_set = DatasetLoader("VOC2012/JPEGImages", "VOC2012/Annotations")
+
+x = VOC_set.__getitem__(1)
+
+print(x)
