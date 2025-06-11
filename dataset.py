@@ -5,10 +5,15 @@ import xml.etree.ElementTree as ET
 
 
 class DatasetLoader:
-    def __init__(self, image_dir, annotations_dir, transform=None):
+    def __init__(self, image_dir, annotations_dir,  S=7, B=2, C=20, transform=None):
         self.annotations_dir = annotations_dir #directory for the image descriptions
         self.image_dir = image_dir #directory for the image file
         self.transform = transform #transformation applied to the image (not used as of now, but set up for future implementation)
+        #TODO: If we struggle to generate enough data to accurately find the cards, I can attempt to implement 'data augmentation'
+        self.S = S #grid size
+        self.B = B #bounding boxes per grid
+        self.C = C #number of classes
+
 
     def __len__(self):
         '''
@@ -53,20 +58,20 @@ class DatasetLoader:
 
         #Getting the object names
 
-        data = list()
+        boxes = list()
         for object in root.iter('object'):
             name = object.find('name').text
             xmin = object.find('bndbox/xmin').text
             ymin = object.find('bndbox/ymin').text
             xmax = object.find('bndbox/xmax').text
             ymax = object.find('bndbox/ymax').text
-            data_tuple = (name, int(xmin), int(ymin), int(xmax), int(ymax))
-            data.append(data_tuple)
+            box = [name, int(xmin), int(ymin), int(xmax), int(ymax)]
+            boxes.append(box)
 
 
         try:
             assert dims == img_array.shape
-            return (data, img_array)
+            return (boxes, img_array)
         except:
             print(dims)
             print(img_array.shape)
