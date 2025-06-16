@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 # TODO: reimplement this later with a better implementation avoiding the use of opencv
 def resize_image(img, shape = (448, 448)):
@@ -33,3 +34,16 @@ def resize_image(img, shape = (448, 448)):
     im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
 
     return im
+
+
+def LeakyReLU(x, alpha = 0.1):
+    '''
+    Implementation of the Leaky ReLU activation function.
+    :param x: input tensor (we are going to apply the activation function element wise)
+    :param alpha: chosen slope for values below 0
+    :return: non-linear applied activation function to each element
+    '''
+    if x > 0:
+        return x
+    else:
+        return alpha * x
